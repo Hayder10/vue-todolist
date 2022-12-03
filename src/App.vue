@@ -4,6 +4,7 @@
     <div class="brand">Todo List App</div>
   </nav>
   <main class="container">
+    <Alert message="To do Title is required!" :show="showAlert" @close="showAlert = false" type="info"/>
     <section>
       <form class="add-todo-form">
         <input v-model="todoTitle" type="text" placeholder="Todo Title">
@@ -25,26 +26,36 @@
 </template>
 
 <script>
-export default {
-  data(){
-    return{
-      todoTitle: "",
-      todos: [],
-    }
-  },
+import Alert from './components/Alert.vue'
 
-  methods:{
-    addTodo(){
-      this.todos.push({
-        title: this.todoTitle,
-        id: Math.floor(Math.random() * 1000)
-      })
-      this.todoTitle = ""
+export default {
+    components:{
+      Alert,
     },
-    removeTodo(todoTitle){
-      this.todos = this.todos.filter(todo => todo !== todoTitle)
-    }
-  }
+    data() {
+        return {
+            todoTitle: "",
+            todos: [],
+            showAlert: false,
+        };
+    },
+    methods: {
+        addTodo() {
+            if (this.todoTitle === "") {
+                this.showAlert = true;
+                return;
+            }
+            this.todos.push({
+                title: this.todoTitle,
+                id: Math.floor(Math.random() * 1000)
+            });
+            this.todoTitle = "";
+        },
+        removeTodo(todoTitle) {
+            this.todos = this.todos.filter(todo => todo !== todoTitle);
+        }
+    },
+    components: { Alert }
 }
 </script>
 
@@ -61,6 +72,7 @@ export default {
 .brand {
   font-size: 2rem;
 }
+
 
 .add-todo-form {
   display: flex;
@@ -97,5 +109,6 @@ export default {
   font-size: 30px;
   color: var(--text-color);
   background: var(--danger-color);
+  cursor: pointer;
 }
 </style>
