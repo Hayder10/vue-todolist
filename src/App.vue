@@ -1,60 +1,82 @@
 <template>
-    <nav class="navbar">
-      <img src="./assets/logo.svg" width="50"/>
-      <div class="brand">Todo List App</div>
-    </nav>
-    <main class="container">
-      <section>
-        <form class="add-todo-form">
-          <input type="text" placeholder="Todo Title">
-          <div>
-            <button>Add Task</button>
-          </div>
-        </form>
-      </section>
-      <section>
-        <div class="todo">
-          <p>Pasear al Perro</p>
-          <div>
-            <button class="remove-todo-btn">&times;</button>
-          </div>
+  <nav class="navbar">
+    <img src="./assets/logo.svg" width="50" />
+    <div class="brand">Todo List App</div>
+  </nav>
+  <main class="container">
+    <section>
+      <form class="add-todo-form">
+        <input v-model="todoTitle" type="text" placeholder="Todo Title">
+        <div>
+          <button @click.prevent="addTodo">Add Task</button>
         </div>
-      </section>
-    </main>
+      </form>
+    </section>
+    <section>
+      <div v-for="(todo) in todos" class="todo">
+        <p>{{ todo }}</p>
+        <div>
+          <button @click="removeTodo(todo)" class="remove-todo-btn">&times;</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
 </template>
 
-<script setup>
+<script>
+export default {
+  data(){
+    return{
+      todoTitle: "",
+      todos: [],
+    }
+  },
+
+  methods:{
+    addTodo(){
+      this.todos.push(this.todoTitle)
+      this.todoTitle = ""
+    },
+    removeTodo(todoTitle){
+      this.todos = this.todos.filter(todo => todo !== todoTitle)
+    }
+  }
+}
 </script>
 
 
 <style scoped>
-.navbar{
+.navbar {
   display: flex;
   align-items: center;
   background-color: var(--navbar-color);
   padding: 20px;
   margin-bottom: 30px;
 }
-.brand{
+
+.brand {
   font-size: 2rem;
 }
 
-.add-todo-form{
+.add-todo-form {
   display: flex;
   justify-content: space-between;
 }
-.add-todo-form input{
+
+.add-todo-form input {
   width: 80%;
   border: solid 2px var(--accent-color);
 }
-.add-todo-form button{
+
+.add-todo-form button {
   background: var(--accent-color);
   color: var(--text-color);
   border: none;
   height: 50px;
 }
-.todo{
+
+.todo {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,11 +85,14 @@
   padding: 0 20px 0 20px;
   border-radius: 5px;
 }
-.remove-todo-btn{
+
+.remove-todo-btn {
   border-radius: 50%;
   border: none;
   width: 40px;
   height: 40px;
+  font-size: 30px;
+  color: var(--text-color);
+  background: var(--danger-color);
 }
-
 </style>
