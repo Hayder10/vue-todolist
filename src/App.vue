@@ -1,17 +1,9 @@
 <template>
-  <nav class="navbar">
-    <img src="./assets/logo.svg" width="50" />
-    <div class="brand">Todo List App</div>
-  </nav>
   <main class="container">
-    <Alert message="To do Title is required!" :show="showAlert" @close="showAlert = false" type="info"/>
+    <Navbar />
+    <Alert message="To do Title is required!" :show="showAlert" @close="showAlert = false" type="danger"/>
     <section>
-      <form class="add-todo-form">
-        <input v-model="todoTitle" type="text" placeholder="Todo Title">
-        <div>
-          <button @click.prevent="addTodo">Add Task</button>
-        </div>
-      </form>
+     <AddTodoForm @submit="addTodo"/>
     </section>
     <section>
       <div v-for="(todo) in todos" class="todo" v-bind:key="todo.id">
@@ -26,27 +18,28 @@
 </template>
 
 <script>
+import AddTodoForm from './components/AddTodoForm.vue';
 import Alert from './components/Alert.vue'
+import Navbar from './components/Navbar.vue';
 
 export default {
     components:{
-      Alert,
+      Alert,Navbar,AddTodoForm
     },
     data() {
         return {
-            todoTitle: "",
             todos: [],
             showAlert: false,
         };
     },
     methods: {
-        addTodo() {
-            if (this.todoTitle === "") {
+        addTodo(title) {
+            if (title === "") {
                 this.showAlert = true;
                 return;
             }
             this.todos.push({
-                title: this.todoTitle,
+                title,
                 id: Math.floor(Math.random() * 1000)
             });
             this.todoTitle = "";
@@ -55,41 +48,12 @@ export default {
             this.todos = this.todos.filter(todo => todo !== todoTitle);
         }
     },
-    components: { Alert }
+    components: { Alert, Navbar, AddTodoForm }
 }
 </script>
 
 
 <style scoped>
-.navbar {
-  display: flex;
-  align-items: center;
-  background-color: var(--navbar-color);
-  padding: 20px;
-  margin-bottom: 30px;
-}
-
-.brand {
-  font-size: 2rem;
-}
-
-
-.add-todo-form {
-  display: flex;
-  justify-content: space-between;
-}
-
-.add-todo-form input {
-  width: 80%;
-  border: solid 2px var(--accent-color);
-}
-
-.add-todo-form button {
-  background: var(--accent-color);
-  color: var(--text-color);
-  border: none;
-  height: 50px;
-}
 
 .todo {
   display: flex;
